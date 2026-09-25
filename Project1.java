@@ -1,17 +1,85 @@
 import java.util.*;
 
 class Project1 {
-    Scanner input;
-    Process[] table;
+    private final String NL = "\n";
+    private static Scanner input;
+    private static Process[] table;
     public static void main(String[] args) {
+        input = new Scanner(System.in);
+        System.out.println("Enter the table size:");
+
+        if (!input.hasNextInt()) {
+            System.out.println("Invalid input.");
+            return;
+        }
+
+        int n = input.nextInt();
+        if (n <= 0) {
+            System.out.println("Invalid table size.");
+            return;
+        }
+
+        table = new Process[n]; 
+        for (int i = 0; i < n; i++) {
+            table[i] = new Process();
+        }
+        table[0].setParentIndex(0);
+
         
+
     }
 
     public static void printHierarchy() {
-
+        int count = 0;
+        while (table.length - 1 > count) {
+            System.out.println("Process " + count + ": Parent = " + table[count].getParentIndex() + ", First Child = " + table[count].getFirstChildIndex() + ", Younger Sibling = " + table[count].getYoungerSiblingIndex());
+            count++;
+        }
     }
 
     public static void addProcess() {
         System.out.println("Enter the parent process index for the child process:");
+        if (!input.hasNextInt()) {
+            System.out.println("Invalid input.");
+            input.nextLine();
+            return;
+        }
+
+        int parentIndex = input.nextInt();
+        input.nextLine();
+        if (parentIndex < 0 || parentIndex >= table.length) {
+            System.out.println("Invalid process index.");
+            return;
+        }
+
+        if (table[parentIndex].getParentIndex() == -1) {
+            System.out.println("Process index is not active.");
+            return;
+        }
+
+        int childIndex = 0;
+        while (table[childIndex].getParentIndex() != -1) {
+            childIndex++;
+            if (childIndex == table.length) {
+                System.out.println("Unable to assign an index for the child process.");
+                return;
+            }
+        }
+
+        table[childIndex].setParentIndex(parentIndex);
+        if (table[parentIndex].getFirstChildIndex() == -1) {
+            table[parentIndex].setFirstChildIndex(childIndex);
+        } else {
+            int youngestIndex = table[parentIndex].getFirstChildIndex();
+            while(table[youngestIndex].getYoungerSiblingIndex() != -1) {
+                youngestIndex = table[youngestIndex].getYoungerSiblingIndex();
+            }
+            table[youngestIndex].setYoungerSiblingIndex(childIndex);
+        }
+
+        System.out.println("Process " + childIndex + " was added as a child of process " + parentIndex + ".");
     }
+
+
+
 }
