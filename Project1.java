@@ -66,11 +66,28 @@ class Project1 {
                             "Enter selection:");
     }
 
+    /*
+    1
+Index   Parent  First   Younger
+0       0       1       
+1       0 
+
+ONLY PRINT ACTIVE ROWS. NOT EVERY ROW ALL THE TIME
+    */
     public static void printHierarchy() {
-        int count = 0;
-        while (table.length - 1 > count) {
-            System.out.println("Process " + count + ": Parent = " + table[count].getParentIndex() + ", First Child = " + table[count].getFirstChildIndex() + ", Younger Sibling = " + table[count].getYoungerSiblingIndex());
-            count++;
+        System.out.println("Index\tParent\tFirst\tYounger");
+        for (int i = 0; i < table.length; i++) {        
+            int parent, first, younger;
+
+            parent = table[i].getParentIndex();
+            first = table[i].getFirstChildIndex();
+            younger = table[i].getYoungerSiblingIndex();
+
+            String p = parent == -1 ? "0" : Integer.toString(parent);
+            String f = first == -1 ? "0" : Integer.toString(first);
+            String y = younger == -1 ? "0" : Integer.toString(younger);
+
+            System.out.println(i + "\t" + p + "\t" + f + "\t" + y);
         }
     }
 
