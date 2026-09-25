@@ -73,19 +73,24 @@ Index   Parent  First   Younger
 1       0 
 
 ONLY PRINT ACTIVE ROWS. NOT EVERY ROW ALL THE TIME
+table[0].setParentIndex(0); in main loop
     */
     public static void printHierarchy() {
         System.out.println("Index\tParent\tFirst\tYounger");
         for (int i = 0; i < table.length; i++) {        
             int parent, first, younger;
 
+            if (table[i].getParentIndex() == -1) {
+                continue; // Skip inactive rows
+            }
+
             parent = table[i].getParentIndex();
             first = table[i].getFirstChildIndex();
             younger = table[i].getYoungerSiblingIndex();
 
             String p = parent == -1 ? "0" : Integer.toString(parent);
-            String f = first == -1 ? "0" : Integer.toString(first);
-            String y = younger == -1 ? "0" : Integer.toString(younger);
+            String f = first == -1 ? "" : Integer.toString(first);
+            String y = younger == -1 ? "" : Integer.toString(younger);
 
             System.out.println(i + "\t" + p + "\t" + f + "\t" + y);
         }
